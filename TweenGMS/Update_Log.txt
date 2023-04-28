@@ -1,0 +1,651 @@
+== TweenGMS Update Log ==
+
+[NOTE]
+Please be aware that an upcoming update (v0.97) will be introducing major changes.
+It will be advised to back up your projects and/or TweenGMS version before updating.
+
+** PLEASE CLEAR COMPILER CACHE FOR YYC TARGETS AFTER UPDATING **
+
+[0.9.64]
+
+- Fixed crashes related to YYC targets
+  * make sure to clear compiler cache before using
+
+- Removed temporary fix for "with()" bug when using HTML5 targets
+  * gives back extra performance
+  * note that this might cause original issue to occur in older versions of GameMaker
+  * original bug requires deactivated targets to manually have tweens paused/resumed
+
+- TweenSystemOptimise() is currently useless!
+  * recent updates to script_execute() greatly improved YYC performance
+    which equals or surpasses custom YYC optimsations
+  * other optimisations may be added in future to again warrant use of this script
+
+- Slight tweaks to demo project and example game
+
+- Might eat a bowl of cereal before getting sleep...
+
+
+[0.9.63]
+
+- Fixed bug where eased value might not fully reach destination value when finished (e.g. 5 -> 4.999)
+
+- Fixed case where extended property setters fail to immediately update target's property
+
+- Temp fix for HTML5/JS not auto-pausing tweens belonging to deactivated targets
+
+- Tween stepping updated to work with extended property setters
+
+- Fixed compiler crash caused by latest GM:S EA update
+
+- Attempted fix for odd behaviour/crashing with latest Beta/EA GM:S updates
+
+***
+It has come to my attention that manipulating tweens belonging to deactivated targets might not be
+working as expected. A future update will address this by changing how property setters are handled.
+Consequently, this change will also boost HTML5/JS performance by 300% and YYC by 15%.
+***
+
+
+[0.9.62]
+
+- Fixed tween delays being lost for persistent rooms
+
+- Moved scripts in resource tree to improve intellisense order
+
+- Moved ease algorithms and property setters into [TweenGMS_Include] folder
+
+- Moved obj_SharedTweener into [TweenGMS] objects folder
+  * More objects may be added in the future
+
+
+[0.9.61]
+
+- Added ability to create extended property setters
+  * Please look up TPSetExt() in documentation
+
+- Added TweenDelayPropertySetter()
+  * Helps prevent extended property setter conflicts when mixing 
+    TweenPlay****() and TweenPlay****Delay calls with a single tween
+  * Shouldn't be required when using TweenFire****Delay or TweenSimple****Delay scripts
+
+- Optimised various simple tweens to use 1 tween instead of 2
+  * TweenSimpleMove
+  * TweenSimpleScale
+  * TweenSimpleHVSpeedRamp
+
+- All simple tweens now return a single tween index
+  * Except for delays which return an array holding tween id and delay id
+
+- Added optional YYC optimisation path
+  * Can increase performance by 2x
+  * Please see TGMS_Optimisation_Setup script for more details
+
+- Added TweenSystemDeltaTime()
+  * Returns the tweening system's delta time for each step
+
+- Changed x__int and y__int to roundx__ and roundy__
+  * x__int and y__int still work but will no longer be officially supported or documented
+
+- Added TweenSimpleColourDelay()
+
+- Added delay scripts for path tweening
+
+- Tweaks to handling of path tweening
+
+- Reduced memory footprint
+
+- Added score__ and health__ to default property setters
+
+- Updated demo project
+
+- Updated documentation
+
+
+
+[0.9.5]
+
+- Added complete game project example [Alien Odds]
+  * AlienOdds_Game_Project.gmz must be imported from GameMaker's startup menu
+
+- Extended documentation with a basic starter guide
+  * Planning to greatly expand this in future updates
+
+- Added tween reverse event
+  * TweenOnReverse____()
+
+- Added tween delay events
+  * TweenDelayOnFinish()
+  * TweenDelayOnCancel()
+  * TweenDelayOnPause()
+  * TweenDelayOnResume()
+
+- Tween__All() and Tween__Group() scripts have new arguments asking if tweens belonging to deativated targets should be affected
+
+- Removed null__ property setter
+  * Functionality has been replaced by using an empty string "" instead
+  e.g. TweenCreate(id, "", true);
+
+- Targets deactivated during an event callback will no longer call remaining callbacks designated to target
+  * Please use a other/controller instance or SharedTweener() as the callback target to call any remaining callbacks
+
+- Removed depcrecated script TweenSetSpeed()
+  * TweenSetTimeScale() must now be used instead
+
+- Added TweenDefaultSetGroup() / TweenDefaultGetGroup()
+  * Indicates which control group newly created tweens will belong to
+
+- Added TweenDelayFinish()
+
+- Added TweenStepNextAll() which was mistakenly omitted from previous build (sorry)
+
+- Placed Ease Algorithms and Property Setters into their own single scripts
+  * It is suggested to add custom scripts outside of these. But, I'm not your boss. Do as you please!
+
+- Reduced tween memory usage
+
+- Fixed TweenSimpleMove() mistakenly using rounded property setters 
+
+- Fixed bug where TweenIteratorReset() wasn't resetting iterator
+
+- Fixed bug where TweenDestroyAll(), TweenDestroyGroup(), or TweenDestroyTarget() could cause an error if called in quick succession
+
+- Fixed TweenCopy()
+
+- Fixed bug where room_restart() could cause unexpected behaviour
+
+- Fixed bug where tweens belonging to deactivated instances in persistent rooms could be lost
+
+- Optimised TweenDefine()
+
+- Internal changes to handling of null tweens/delays/callbacks
+
+- Updated handling of callback/delay invalidation
+
+- Variuos other optimisations and fixes
+
+- Updated script reference documentation
+
+
+[0.9.4] -- July 4, 2014
+
+[ CHANGES ]
+
+- Fixed issues with tweens used by persistent instances
+  * Tweens now return an index value to reference tween array data stored in global tweens map
+
+- Added ability to tween path resources (experimental)
+  *TweenPathFire()
+  *TweenPathFireBounce()
+  *TweenPathFirePatrol()
+  *TweenPathFireRepeat()
+  *TweenPathFireLoop()
+  ** Scripts return tween handles 
+
+- Added TweenFirePatrol(), TweenFireLoop(), TweenFireRepeat()
+
+- Added TweenSimpleColour()
+  * Currently, can't be used with a delay like other simple tweens
+
+- Slight modification to how tweens using [loop] and [repeat] are updated
+  * Allows for smoother transitions in certain cases
+
+- Added tweens list iteration scripts
+  * TweenIterator() -- Creates new iterator and returns array reference
+  * TweenIteratorNext() -- Fetches next tween
+  * TweenIteratorReset() -- Resets the existing iterator
+  * e.g
+	var _iterator = TweenIterator();
+	while(TweenIteratorNext(_iterator))
+	{
+    	   TweenSetEase(_iterator[0], _newEase);
+	}
+
+- Added scripts to update tween states by target
+  * TweenStopTarget()/TweenPauseTarget()/... etc
+
+- Added TweenStep*All(), TweenStep*Group(), TweenStep*Target()
+
+- Added TweenPlayGroup(), TweenPlayTarget()
+
+- Added TweenSetTimeScaleTarget()
+
+- Added TweenOn****EnableTarget()
+
+- Added TweenDelayGetTime(), TweenDelaySetTime()
+
+- Added TweenDelayExists()
+
+- Added TweenCallbackExists()
+
+- Changed behaviour of TweenCopy()
+  * Events and delays are not copied over
+
+- Fixed Case where tweens would not be automatically destroyed when designated to do so
+
+- Fixed bug where simple tweens could cause a crash
+
+- Various optimisations
+
+
+
+[Beta 0.93.01]
+
+- Fixed error with TweenOn___Clear() scripts
+
+- Fixed case where TweenPlayOnce(tween) could use wrong play mode after using other TweenPlay____() functions
+
+- Minor documentation tweaks
+
+
+[Beta 0.93]
+
+- Changed TweenDelay?????(delay) -> TweenDelay?????(tween,[delay])
+  * Supplying only the tween handle will affect all delays belonging to the tween
+  * Optional argument for specifying delay
+
+- Simple tweens now return tween and delay handles
+  * returned as array if needed
+  * Please see documentation on how to access handles
+
+- Optimised simple tweens
+  * Now immediately cleaned from system when no longer needed
+
+- TweenDestroyWhenDone() now considers delayed tweens
+  * Tween won't be destroyed until it is either finished or stopped and all delays processed
+
+- Modified handling of event callback memory management to prevent issues for edge cases
+
+- Slight tweak for maintaining predictable delta time behaviour
+
+- Minor performance optimisation to passive garbage collecter
+
+- Removed TweenSimpleDestroyWhenDone()
+  * no longer needed as all simple tweens are now destroyed when no longer needed
+
+- Minor optimisations to various ease algorithms
+
+- Changed TweenFireBack() to TweenFireBounce()
+
+- Added TweenFireDelay() and TweenFireBounceDelay()
+
+- Modified functioning of TweenDelayNull()
+  * should now work similar to TweenNull()
+
+- Updated script reference documenation
+
+- Changed TweenSystemIsActive() to TweenSystemGetEnabled()
+
+- Changed TweenSystemEnable/Disable() to TweenSystemSetEnabled(bool)
+
+- Added TweenFire() and TweenFireBack()
+
+- Added TweenExists()
+
+- Changed TweenOn****RemoveAll() to TweenOn****Clear() to align with other naming coventions
+
+- obj_SharedTweener system settings are now global
+  * Settings will be remembered if shared tweener is destroyed and created later
+
+- TweenDestroy() no longer returns a null tween but invalidates handle
+  * TweenDestroy(tween); // Tween is destroyed and handle cleared -- will cause error if handle is later called
+  * tween = TweenNull(); // Assign 'tween' a null tween which can be safely called later without error
+
+- Added scripts to enable/disable tween events
+  * TweenOn****Enable(tween,enable) | TweenOn****EnableGroup(group,enable) | TweenOn****EnableAll(enable)
+  * Example:
+	TweenOnPauseEnable(tween, false); // Suppress callbacks for pause event
+	TweenPause(tween);		  // Pause the tween
+	TweenOnPauseEnable(tween, true);  // Enable callbacks for pause event 
+
+- Added optional ability to dynamically create tweenable properties by using single index arrays
+  * Can now pass array handle as property setter to TweenCreate()
+  Example:
+	/// Create Event
+	pValue[0] = 100; // Create an array with a single index[0] value
+	tween = TweenCreate(id, pValue, true); // Pass "pValue" as property
+	TweenPlayPatrol(tween, EaseLinear, 0, 100, 2.0); // Ease pValue[0] between 0 and 100 over 2 seconds
+	
+	/// Draw Event
+	draw_text(x, y, pValue[0]); // Draw the value of pValue[0]
+
+- Added script: TweenSystemSetMinDeltaFPS(fps)
+  * Sets the minimum framerate before delta timing will lag behind
+
+- Renamed shared_Tweener to obj_SharedTweener
+
+- TweenDeltaCreate() is now obsolete
+  * Please change to TweenCreate()
+
+- Modified TweenCreate() script definition
+  * Tweens can now be, optionally, fully defined at creation
+  * TweenCreate(target,property,delta,[ease, start, dest, dur])
+
+- Modified TweenPlay????() script definitions  
+  * TweenPlayOnce(tween,[ease,start,dest,dur])
+  * Property can still be changed by using TweenSetProperty()
+  * TweenPlay????(tween) -- Tween handle can be supplied by itself if tween is fully defined by create event
+  * Example:
+	TweenPlayOnce(tween_x, EaseOutQuad, 0, 100, 30);
+	TweenPlayOnce(tween_y); // Play fully defined tween -- Can optionally override previously defined values
+
+- Changed TweenGetInstance()/TweenSetInstance() -> TweenGetTarget()/TweenSetTarget()
+
+- Changed TweenIsActive() -> TweenIsPlaying()
+
+- Performance optimizations
+  * Reduced memory footprint (At least, I like to think so)
+  * Converted tweens from lists to arrays for extra speed
+  * Optimised obj_SharedTweener's update loop
+  * Decreased overhead for inactive tweens
+  * Slight speed increase for EaseInOutBack
+  * Other various optimisations
+
+- Added null__ property setter
+  * Use when you DO NOT want a specfic property tweened
+  * Useful when used with TweenCalc() to return value
+
+- Added TweenCalc(tween)
+  * Returns calculated ease value using tween's current properties
+  * Also added TweenCalcAmount(tween,amount) and TweenCalcTime(tween,time) variants
+
+- Added TweenFinish(tween,call_event)
+  * Immediately finishes tween and, optionally, executes onFinish event
+  * Also added TweenFinishAll() and TweenFinishGroup()
+
+- Added TweenDestroyWhenDone(tween,destroy,kill_target) and TweenDefaultSetDestroyWhenDone(destroy)
+  * Indicates whether or not tween should be destroyed when finished or stopped
+  * Optionally destoy tween's target if desired
+  * Example:{ TweenDestroy(tween, true, false); } // Will destroy when finished or stopped... but won't destroy target
+
+- Added TweenSystemFlushDestroyed()
+  * Overrides passive garbage collector by immediately purging all destroyed tweens from system
+
+- Added TweenCopy(tween,target)
+  * Creates and returns a copy of an existing tween
+
+- Added TweenDefine(tween,ease,start,dest,dur)
+  * Quickly adjust a tween's defined values
+
+- Added scripts to return total number of tweens in system (DO NOT include tweens in inactive persistent rooms)
+  * TweenSystemCount()
+  * TweenSystemCountPlaying()
+  * TweenSystemCountPaused()
+  * TweenSystemCountStopped()
+  * !!CAUTION!! TweenSystemCount() is much faster than other function calls -- Please use functions only for debug purposes
+ 	
+- Removed potential error where onEventRemove() scripts are called during event callback execution
+  * Callbacks are now removed one step after script is called
+
+- Added intellisense to ease scripts
+
+- Lowered minimum delta fps default from 15 to 10
+
+- Improved project's inline documentation and organisation
+
+
+[0.92a]
+
+- Updated documentation
+
+- Fixed bug which prevented Ease*Elastic algorithms from tweening a higher to lower value
+
+- Added to default property setters
+  * image_scale__ (thanks to GregBug for idea)
+  * depth__
+  * friction__
+  * gravity__
+  * gravity_direction__
+  * example_property__ (to illustrate creation of custom property setters)
+
+- Changed TweenUseDelta() -> TweenSetUseSeconds()
+
+- Changed TweenIsDelta() -> TweenGetUseSeconds()
+
+
+[0.92]
+
+- Removed need of TArgs() for supplying arguments to tween events
+  * Arguments now directly inputed 
+  * Up to 13 arguments can be supplied
+  * e.g. TweenOnFinishAdd(tween, id, ShowText, "Hello");
+
+- TweenSetSpeed()/TweenGetSpeed() have been changed to TweenSetTimeScale()/TweenGetTimeScale()
+  * Added TweenSetTimeScaleAll()
+  * Added TweenSetTimeScaleGroup() 
+
+- Added scripts to GET/SET default time scale of newly created tweens
+  * TweenDefaultSetTimeScale(scale)
+  * TweenDefaultGetTimeScale()
+
+- TweenCreate(instance, use_seconds) now includes optional argument to set between step/delta timing
+  * Default timing is step based
+  * TweenDeltaCreate() is still supported but will no longer be documented
+  * e.g. TweenCreate(id, true);
+
+- Added scripts for clearing persistent rooms of tween data
+  * TweenSystemClearRoom()
+  * TweenSystemClearAllRooms()
+
+- Added scripts for stepping forward and backwards through tweens
+  * TweenStepNext()
+  * TweenStepPrevious()
+
+- Optimized event execution
+
+- Fixed potential memory leak when using tween events
+
+- Fixed bug where delay for persistent instance could be lost on room change
+
+
+[0.91]
+
+- Added script to set/get tweening system's time scale
+  * TweenSystemSetTimeScale(scale)
+  * TweenSystemGetTimeScale()
+
+- Added TweenSimpleUseDelta(bool)
+  * Allows simple tween scripts to switch between delta or step/frame based timing
+
+-Added TweenUseDelta(tween)
+ * Allows a tween to be switched between delta and step/frame based timing
+ * Not suggested for regular use
+
+- Added scripts to manipulate delayed tween timers
+ * TweenDelayCancel()
+ * TweenDelayPause()
+ * TweenDelayResume()
+ * TweenDelayNull()
+
+- Modified EaseElastic* algorithm scripts to prevent "divide by 0" error.
+  * Please update your existing EaseElastic* algorithm scripts
+
+- Bug fixes and minor optimizations
+
+- Extended script reference documentation
+
+- Added basic callback example to demo project
+
+
+[0.90b]
+
+** Please be careful with invalidated tween handles if using manual destruction **
+
+- Optimized manual tween destruction
+
+- Fixed TweenDestroy()
+
+- Added TweenDestroyAll()
+
+- Added TweenDestroyGroup(group)
+
+- Added TweenNull()
+  * e.g. myTween = TweenNull();
+  * Makes a handle "safe" to call if referenced tween is destroyed
+
+- TweenDestroy() now returns a null tween which can be assigned back to tween handle to make it "safe"
+  * e.g. myTween = TweenDestroy(myTween);
+
+
+[0.90a]
+
+- Optimized tween destruction
+
+- Fixed bug where setting tween speed to 0.5 or below could result in unexpected behaviour
+
+- TweenOnEventSub() and TweenOnEventClear() have been changed to TweenOnEventRemove() and TweenOnEventRemoveAll()
+
+- An instance deactivated while calling a tween event callback will now finish calling remaining callbacks added to event
+
+
+[0.90]
+
+- Added persistent room support
+
+- Added Delta Tween Support (use seconds)
+  * Use TweenDeltaCreate() to create delta tween
+  * Delayed tweens will also use delta timing
+  * Use TweenIsDelta() to check if tween uses delta timing
+        
+- Changed handling of ease algorithms
+  * Ease algorithms now decoupled as individual scripts
+  * Better performance of tween processing
+  * Scripts must now be imported into project
+    
+- Optimized simple tween performance
+  * Faster call performance
+  * Smaller memory footprint
+
+- Fixed TweenSystemSetUpdateInterval() not allowing values between 0.0 - 1.0 (for real this time)  
+
+- Optimized tween creation
+
+- Optimized management of tweens for persistent rooms
+
+- Improved system management of simple tweens
+
+- Increased max number of arguments passed to tween event from 13 to 15
+
+- Improved tween creation performance
+
+- Fixed bug causing finished tween to return to start
+
+- Fixed potential crash when using delta tween delays
+
+- Fixed Delta Tweens not using delta timing for delays
+
+
+[0.89]
+
+- Updated TArgs() utility script
+  * MAKE SURE TO REPLACE OLD TArgs() SCRIPT!
+
+- Added advanced event system
+  * TweenOnEventAdd(tween,id,script,TArgs()) functions MUST use TArgs(arg1,arg2,...) to supply arguments!
+  * When supplying no arguments, simply write TArgs() with no parameters
+
+  * All tween event types:
+     * OnFinish
+     * OnPlay
+     * OnPause
+     * OnResume
+     * OnStop
+     * OnBounce
+     * OnLoop
+     * OnRepeat
+  
+  * Example:
+    
+    tween = TweenCreate(id);
+    TweenOnPlayAdd(tween, id, DoABarrelRoll, TArgs()); // Do a barrel roll when tween starts playing
+    
+    action = TweenOnFinishAdd(tween, id, ShowMessage, TArgs("Hello World!"); // add action to tween event
+    TweenOnFinishSub(tween, action); // sub previously added action using returned handle
+    TweenOnFinishClear(tween); // clear all added actions from tween event
+
+- Update interval can now take values between 0.0 and 1.0
+  * NEVER SET AS 0 OR BELOW!!
+  * Delayed tweens now affected by update interval
+  * Setting value below 1 will result in higher cpu usage
+
+- Fixed potential divide by 0 error
+
+- Improved TweenPlayLoop()
+
+- Fixed TweenReverseAll() and TweenReverseGroup()
+
+- Improved tween reverse functionality for different play modes
+
+- Added TweenSimpleTurn() and TweenSimpleTurnDelay()
+  * Make sure to add direction__ property script
+
+- Fixed conflicts with latest GameMaker:Studio version (v1.1.1076)
+
+- Various tweaks and optimizations
+
+
+[0.88b]
+
+- Added new ease type
+  * EASE_IN_ELASTIC
+  * EASE_OUT_ELASTIC	  
+  * EASE_IN_OUT_ELASTIC
+  
+- Slight change to delayed tween processing to make timing more consistent
+
+- Fixed potential memory leak when using simple tweens
+
+
+[0.88a]
+
+- Fixed simple delayed scripts which weren't properly delaying.
+
+- Cleaned up auto-complete suggestions for code editor
+
+- Minor adjustments to shared_Tweener to prevent unexpected behaviour
+
+- Cleaned up some examples in example project
+
+- Added script to call to ensure shared_Tweener is activated after mass deactivation calls.
+  * SharedTweenerActivate() 
+
+
+[0.88]
+
+- Major update to shared_Tweener object -->> **REPLACE PREVIOUS VERSION**
+  * Faster
+  * More stable
+  * Fixed potential memory leaks
+  * STRONGER!
+
+- Added Simple Tween Functions
+  *TweenSimpleMove()
+  *TweenSimpleScale()
+  *TweenSimpleFade()
+  *... etc ...
+
+- Deactivated instances now retain their automated tween.
+  *Tween is automatically paused when instance is deactivated.
+  *Tween is automatically resumed when instance is activated.
+
+- Not advised, but shared_Tweener can now be safely deactivated.(Will stop all tweens from running)
+  *Make sure to use --> instance_activate_object(shared_Tweener) <-- if you use mass deactivation functions.
+
+- Changed included property setters x__Rounded/y__Rounded to x__int/y__int, respectively.
+
+- Cut down TweenSetOnBoundary() to 2 scripts. Now use TArgs() to pass arguments.
+ 	
+  * TweenSetOnBoundary(tween_ref, script_index)
+  * Takes a tween reference and single script constant. 
+  * e.g. 
+	TweenSetOnBoundary(tween_ref, FlipImageX);
+  	
+  * TweenSetOnBoundaryArgs(tween_ref, script_index, TArgs(arg0, arg1, ...))
+  * Takes a tween reference, script constant, AND REQUIRES TArgs() utility script to pass arguments. 
+  * e.g. 
+	TweenSetOnBoundaryArgs(tween_ref, SuperMessageScript, TArgs("Your score is ", myScore));
+
+- TweenSetVariableSetter() has been changed to TweenSetProperty()
+
+- TweenGetVariableSetter() has been changed to TweenGetProperty()
+
